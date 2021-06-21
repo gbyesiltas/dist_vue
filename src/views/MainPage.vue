@@ -1,27 +1,30 @@
 <template>
-    <div>
-        <h1>Skateboards</h1>
-        <CardGrid :skateboards="skateboards"/>
-        <b-button @click="soapMethod()">Try SOAP</b-button>
-    </div>
+  <div>
+    <MyNavbar :navbarBrand="title" :numberOfItems="numberOfItems" />
+    <CardGrid :skateboards="skateboards" @itemAdded="itemAdded"/>
+    <b-button @click="soapMethod()">Try SOAP</b-button>
+  </div>
 </template>
 
 <script>
 import CardGrid from "../components/CardGrid";
+import MyNavbar from "../components/MyNavbar";
 
 export default {
   name: 'MainPage',
   components: {
     CardGrid,
+    MyNavbar
   },
   data(){
     return {
       skateboards : [{"brand":"none","colour":"none","length":0}],
+      title: "Skateboards",
+      numberOfItems : 0,
     }
   },
   methods:{
     soapMethod(){
-
       let xmls= `<?xml version="1.0" encoding="UTF-8"?>
                 <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
                     <SOAP-ENV:Header/>
@@ -42,12 +45,19 @@ export default {
       
       console.log("SOAP Method")
     },
+    itemAdded(){
+      this.numberOfItems= this.numberOfItems+1
+    }
   },
   created() {
     // Simple GET request using fetch
     fetch("http://localhost:8080/DAdemo/api/skateboards")
       .then(response => response.json())
       .then(data => this.skateboards=data);
+    
+    fetch("http://localhost:4545/DAdemo/shopping")
+      .then(response => response.json())
+      .then(data => this.numberOfItems=data.numberOfItems)
   },
 }
 </script>
