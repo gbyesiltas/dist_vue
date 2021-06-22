@@ -10,12 +10,12 @@
       <p>Succesfully added the item to your cart!</p>
     </b-alert>
   <ul class="cardGrid">
-        <li class = "card" v-for="(skateboard, index) in skateboards" :key="index">
+        <li class = "card" v-for="(product, index) in products" :key="index">
           <div class="card-content">
-            <div>Brand: {{skateboard.brand}}</div>
-            <div>Colour: {{skateboard.colour}}</div>
-            <div>Length: {{skateboard.length}}</div>
-            <b-button @click="addToCart(skateboard)" variant="primary">Add To Cart</b-button>
+            <div>{{product.productName}}</div>
+            <div>Price: {{product.productPrice}}</div>
+            <div>Amount in stock: {{product.productAmountInStock}}</div>
+            <b-button @click="addToCart(product)" variant="primary">Add To Cart</b-button>
           </div>
         </li>
   </ul>
@@ -25,7 +25,7 @@
 <script>
 export default {
   name: 'CardGrid',
-  props: ['skateboards'],
+  props: ['products'],
   data(){
     return{
       dismissSecs: 1,
@@ -34,14 +34,14 @@ export default {
     }
   },
   methods:{
-    addToCart(skateboard){
+    addToCart(product){
       fetch("http://localhost:4545/DAdemo/shopping",
         {
           method: 'POST',
           headers:{
             'Content-Type':'application/json'
           },
-          body: skateboard.id
+          body: product.idProducts
         })
       this.showAlert()
       this.succesfullyAdded()

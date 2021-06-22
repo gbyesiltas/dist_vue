@@ -1,7 +1,7 @@
 <template>
   <div>
     <MyNavbar :navbarBrand="title" :numberOfItems="numberOfItems" />
-    <CardGrid :skateboards="skateboards" @itemAdded="itemAdded"/>
+    <CardGrid :products="products" @itemAdded="itemAdded"/>
     <b-button @click="soapMethod()">Try SOAP</b-button>
   </div>
 </template>
@@ -18,8 +18,8 @@ export default {
   },
   data(){
     return {
-      skateboards : [{"brand":"none","colour":"none","length":0}],
-      title: "Skateboards",
+      products : [{"brand":"none","colour":"none","length":0}],
+      title: "Products",
       numberOfItems : 0,
     }
   },
@@ -51,13 +51,13 @@ export default {
   },
   created() {
     // Simple GET request using fetch
-    fetch("http://localhost:8080/DAdemo/api/skateboards")
+    fetch("http://localhost:8080/DAdemo/api/products")
       .then(response => response.json())
-      .then(data => this.skateboards=data);
+      .then(data => this.products=data);
     
     fetch("http://localhost:4545/DAdemo/shopping")
       .then(response => response.json())
-      .then(data => this.numberOfItems=data.numberOfItems)
+      .then(data => this.numberOfItems=data.length)
   },
 }
 </script>

@@ -3,7 +3,7 @@
         <b-navbar toggleable="lg" type="dark" variant="info">
             <b-navbar-brand>{{navbarBrand}}</b-navbar-brand>
             <b-navbar-nav class="ml-auto">
-                <b-nav-item href="#">My Cart</b-nav-item>
+                <b-nav-item @click="goToMyCart()">My Cart</b-nav-item>
                 <b-nav-item disabled>{{numberOfItems}}</b-nav-item>
             </b-navbar-nav>
         </b-navbar>
@@ -17,6 +17,11 @@ export default {
   props: {
       navbarBrand: String,
       numberOfItems: Number,
+  },
+  methods:{
+      goToMyCart(){
+          this.$router.push({ path: 'myCart' })
+      }
   },
   created(){
       console.log(this['navbar-brand'])

@@ -7,6 +7,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import MainPage from "./views/MainPage.vue"
 import About from "./views/About.vue"
+import MyCartPage from "./views/MyCartPage.vue"
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
@@ -16,6 +17,10 @@ const router = new VueRouter({
     {
       path:'/',
       component: MainPage
+    },
+    {
+      path:'/myCart',
+      component: MyCartPage
     },
     {
       path:'/about',
