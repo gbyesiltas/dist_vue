@@ -7,19 +7,23 @@
       @dismissed="dismissCountDown=0"
       @dismiss-count-down="countDownChanged"
       >
-      <p>Succesfully removed the item from the cart!</p>
+      <p>Succesfully removed the item from the cart</p>
     </b-alert>
-    <b-button class="main-page-button" variant="primary" @click="goToMainPage()">Go to Main Page</b-button>
     <h1>My Cart</h1>
+    <h3 v-if="itemsInCart.length==0">There are no items in your cart </h3>
     <ul>
       <li v-for="(item, index) in itemsInCart" :key="index">
         <div class="cart-item">
-          Item with ID: {{item.itemID}}
-          <b-button @click="removeItem(index,item.itemID)" variant="danger"> X </b-button>
+          {{item.productName}}: {{item.productPrice}}$
+          <b-button @click="removeItem(index,item.idProducts)" variant="danger"> X </b-button>
         </div>
       </li>
     </ul>
-    <b-button class="main-page-button" variant="success">Make Order!</b-button>
+    <h3 v-if="itemsInCart.length!=0">Total price: {{totalPrice}}$</h3>
+    <div class="buttons">
+    <b-button class="main-page-button" :disabled="itemsInCart.length==0" variant="success">Make Order!</b-button>
+    <b-button class="main-page-button" variant="primary" @click="goToMainPage()">Go to Main Page</b-button>
+    </div>
   </div>
 </template>
 
@@ -32,10 +36,20 @@ export default {
   data(){
     return {
       itemsInCart : [],
+      itemIDsInCart : [],
       dismissSecs: 1,
       dismissCountDown:0,
       showDismissableAlert: false,
     }
+  },
+  computed: {
+    totalPrice() {
+      let totalPrice=0
+      for(let i=0;i<this.itemsInCart.length;i++){
+        totalPrice+=this.itemsInCart[i].productPrice
+      }
+      return totalPrice
+    },
   },
   methods:{
     goToMainPage(){
@@ -55,11 +69,17 @@ export default {
       this.dismissCountDown = this.dismissSecs
     },
   },
-  created() {
+  async created() {
     // Simple GET request using fetch
-    fetch("http://localhost:4545/DAdemo/shopping")
+    let idsResponse = await fetch("http://localhost:4545/DAdemo/shopping")
+    let idsData = await idsResponse.json()
+
+    for(let i=0;i<idsData.length;i++){
+      const id = idsData[i].itemID
+      fetch("http://localhost:8080/DAdemo/api/products/"+id)
       .then(response => response.json())
-      .then(data => this.itemsInCart=data)
+      .then(data => this.itemsInCart.push(data))
+    }
   },
 }
 </script>
@@ -69,6 +89,7 @@ export default {
     list-style: none;
     margin: 0;
     padding: 0;
+    margin-top: 30px;
   }
 
   li{
@@ -88,5 +109,14 @@ export default {
     align-items: center;
     padding: 10px;
     font-size: 20px;
+  }
+
+  .buttons{
+    display: flex;
+    flex-direction: column;
+    max-width: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:30px;
   }
 </style>

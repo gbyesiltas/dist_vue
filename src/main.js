@@ -8,6 +8,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import MainPage from "./views/MainPage.vue"
 import About from "./views/About.vue"
 import MyCartPage from "./views/MyCartPage.vue"
+import LoginPage from "./views/LoginPage.vue"
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
@@ -26,6 +27,10 @@ const router = new VueRouter({
       path:'/about',
       component: About
     },
+    {
+      path:'/login',
+      component: LoginPage
+    }
   ]
 })
 

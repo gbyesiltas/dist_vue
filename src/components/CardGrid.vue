@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="my-card-grid">
   <b-alert
       :show="dismissCountDown"
       dismissible
@@ -13,7 +13,7 @@
         <li class = "card" v-for="(product, index) in products" :key="index">
           <div class="card-content">
             <div>{{product.productName}}</div>
-            <div>Price: {{product.productPrice}}</div>
+            <div>Price: {{product.productPrice}}$</div>
             <div>Amount in stock: {{product.productAmountInStock}}</div>
             <b-button @click="addToCart(product)" variant="primary">Add To Cart</b-button>
           </div>
@@ -35,6 +35,7 @@ export default {
   },
   methods:{
     addToCart(product){
+      console.log(product.idProducts)
       fetch("http://localhost:4545/DAdemo/shopping",
         {
           method: 'POST',
