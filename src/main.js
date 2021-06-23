@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import MainPage from "./views/MainPage.vue"
-import About from "./views/About.vue"
+import SuccessfulPurchasePage from "./views/SuccessfulPurchase.vue"
 import MyCartPage from "./views/MyCartPage.vue"
 import LoginPage from "./views/LoginPage.vue"
 
@@ -24,8 +24,8 @@ const router = new VueRouter({
       component: MyCartPage
     },
     {
-      path:'/about',
-      component: About
+      path:'/successfulPurchase',
+      component: SuccessfulPurchasePage
     },
     {
       path:'/login',

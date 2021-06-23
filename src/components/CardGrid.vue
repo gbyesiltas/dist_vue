@@ -12,7 +12,7 @@
   <ul class="cardGrid">
         <li class = "card" v-for="(product, index) in products" :key="index">
           <div class="card-content">
-            <div>{{product.productName}}</div>
+            <div class="product-name">{{product.productName}}</div>
             <div>Price: {{product.productPrice}}$</div>
             <div>Amount in stock: {{product.productAmountInStock}}</div>
             <b-button @click="addToCart(product)" variant="primary">Add To Cart</b-button>
@@ -38,7 +38,7 @@ export default {
       console.log(product.idProducts)
       fetch("http://localhost:4545/DAdemo/shopping",
         {
-          method: 'POST',
+          method: 'PUT',
           headers:{
             'Content-Type':'application/json'
           },
@@ -83,9 +83,13 @@ li, ul{
 }
 
 .btn{
-  margin-top: 30px;
+  margin-top: 10px;
   margin-left: 10px;
   margin-right: 10px;
+}
+
+.product-name{
+  font-weight: bold;
 }
 
 b-alert{

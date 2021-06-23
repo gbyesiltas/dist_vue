@@ -21,7 +21,7 @@
     </ul>
     <h3 v-if="itemsInCart.length!=0">Total price: {{totalPrice}}$</h3>
     <div class="buttons">
-    <b-button class="main-page-button" :disabled="itemsInCart.length==0" variant="success">Make Order!</b-button>
+    <b-button class="main-page-button" :disabled="itemsInCart.length==0" variant="success" @click="makeOrder()">Make Order!</b-button>
     <b-button class="main-page-button" variant="primary" @click="goToMainPage()">Go to Main Page</b-button>
     </div>
   </div>
@@ -68,6 +68,14 @@ export default {
     showAlert() {
       this.dismissCountDown = this.dismissSecs
     },
+    async makeOrder(){
+      let response = await fetch("http://localhost:4545/DAdemo/shopping", {method: 'POST'})
+      let responseJson = await response.json()
+
+      if(responseJson.result == 'success'){
+        this.$router.push('/successfulPurchase')
+      }
+    }
   },
   async created() {
     // Simple GET request using fetch
