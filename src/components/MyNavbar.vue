@@ -9,6 +9,7 @@
             <b-navbar-nav class="ml-auto">
                 <div class="right-items">
                 <b-nav-item v-if="loggedIn==false" @click="goToLogin()">Log in</b-nav-item>
+				<b-nav-item @click="goToMessage()">Send us a message</b-nav-item>
                 <b-nav-item @click="goToMyCart()">My Cart</b-nav-item>
                 <b-nav-item class="cart-number" disabled>{{numberOfItems}}</b-nav-item>
                 </div>
@@ -37,6 +38,9 @@ export default {
       goToLogin(){
           this.$router.push({path:'login'})
       },
+	  goToMessage(){
+		this.$router.push({path:'message'})
+	  },
       getAllProducts(){
           this.activeFilter=0
           this.$emit('productFilterApplied',this.activeFilter)
