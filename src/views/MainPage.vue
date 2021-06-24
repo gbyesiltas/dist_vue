@@ -4,7 +4,6 @@
     <CardGrid :products="products" @itemAdded="itemAdded"/>
     
     <div class="buttons">
-    <b-button class="main-page-button" @click="soapMethod()">Try SOAP</b-button>
     <b-button class="main-page-button" v-if="loggedIn" variant="danger" @click="logOut()">Log Out</b-button>
     </div>
 
@@ -36,26 +35,23 @@ export default {
     }
   },
   methods:{
-    soapMethod(){
+    async getNumberOfVisits(){
       let xmls= `<?xml version="1.0" encoding="UTF-8"?>
                 <S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
                     <SOAP-ENV:Header/>
                     <S:Body>
-                        <ns2:mirrorNumber xmlns:ns2="http://webservices/">
-                            <arg0>10</arg0>
-                        </ns2:mirrorNumber>
+                         <ns2:getNumberOfVisits xmlns:ns2="http://webservices/"/>
                     </S:Body>
                 </S:Envelope>`
 
-      fetch('http://localhost:4545/DAdemo/SOAPSer?WSDL',{
+      let xmlResponse = await fetch('http://localhost:4545/DAdemo/WebStatsSOAP?WSDL',{
         method:'POST',
         headers:{'Content-Type':'text/xml'},
         body:xmls})
-            .then(res=>{
-             console.log(res.body);
-           }).catch(err=>{console.log(err)});
       
-      console.log("SOAP Method")
+      let xmlBody = await xmlResponse.text()
+      let xmlReturnValue = this.fetchXMLResponseValue(xmlBody)
+      return xmlReturnValue
     },
     itemAdded(){
       this.numberOfItems= this.numberOfItems+1
@@ -67,12 +63,21 @@ export default {
       if(this.activeProductFilter==filterNo) return
       fetch('http://localhost:8080/DAdemo/api/products')
     },
+    fetchXMLResponseValue(xmlBody){
+      let returnValueStart = xmlBody.indexOf('<return>')+8
+      let returnValueEnd = xmlBody.indexOf('</return>')-1
+      let xmlReturnValue = ''
+      for(let i=0;i<=returnValueEnd-returnValueStart;i++){
+        xmlReturnValue += xmlBody[returnValueStart+i]
+      }
+      return xmlReturnValue
+    },
     async logOut(){
       await fetch("http://localhost:4545/DAdemo/registration?requestType=logout",{method:'POST'})
       location.reload();
     }
   },
-  created() {
+  async created() {
     // Simple GET request using fetch
     fetch("http://localhost:8080/DAdemo/api/products")
       .then(response => response.json())
@@ -82,10 +87,7 @@ export default {
       .then(response => response.json())
       .then(data => this.numberOfItems=data.length)
 
-    fetch("http://localhost:4545/DAdemo/stats")
-      .then(response => response.json())
-      .then(data => this.numberOfVisits=data.numberOfVisits)
-    
+    this.numberOfVisits = parseInt(await this.getNumberOfVisits())
   },
 }
 </script>

@@ -69,12 +69,20 @@ export default {
       this.dismissCountDown = this.dismissSecs
     },
     async makeOrder(){
-      let response = await fetch("http://localhost:4545/DAdemo/shopping", {method: 'POST'})
-      let responseJson = await response.json()
-
-      if(responseJson.result == 'success'){
-        this.$router.push('/successfulPurchase')
+      let loginResponse = await fetch("http://localhost:4545/DAdemo/registration")
+      let loginResponseJson = await loginResponse.json()
+      console.log(loginResponseJson)
+      if(loginResponseJson.isLoggedIn == false){
+        this.$router.push('/login')
       }
+      else{
+        let response = await fetch("http://localhost:4545/DAdemo/shopping", {method: 'POST'})
+        let responseJson = await response.json()
+
+        if(responseJson.result == 'success'){
+          this.$router.push('/successfulPurchase')
+        }
+    }
     }
   },
   async created() {
