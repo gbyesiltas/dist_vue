@@ -1,7 +1,7 @@
 <template>
   <div>
     <MyNavbar @productFilterApplied="applyProductFilter" @isLoggedIn="isLoggedIn" :numberOfItems="numberOfItems" />
-    <CardGrid :products="products" @itemAdded="itemAdded"/>
+    <CardGrid :products="filteredProducts" @itemAdded="itemAdded"/>
     
     <div class="buttons">
     <b-button class="main-page-button" v-if="loggedIn" variant="danger" @click="logOut()">Log Out</b-button>
@@ -27,6 +27,7 @@ export default {
   data(){
     return {
       products : [{"brand":"none","colour":"none","length":0}],
+      filteredProducts: [{"brand":"none","colour":"none","length":0}],
       title: "Products",
       numberOfItems : 0,
       loggedIn: false,
@@ -60,8 +61,23 @@ export default {
       this.loggedIn=true
     },
     applyProductFilter(filterNo){
-      if(this.activeProductFilter==filterNo) return
-      fetch('http://localhost:8080/DAdemo/api/products')
+
+      if(this.activeProductFilter==filterNo){
+        return
+      }
+
+      this.activeProductFilter = filterNo
+      if(this.activeProductFilter==0){
+        this.filteredProducts = this.products
+        return
+      }
+
+      this.filteredProducts = []
+      for(let i=0;i<this.products.length;i++){
+        if(this.products[i].idProductsTypes == this.activeProductFilter){
+          this.filteredProducts.push(this.products[i])
+        }
+      }
     },
     fetchXMLResponseValue(xmlBody){
       let returnValueStart = xmlBody.indexOf('<return>')+8
@@ -81,7 +97,8 @@ export default {
     // Simple GET request using fetch
     fetch("http://localhost:8080/DAdemo/api/products")
       .then(response => response.json())
-      .then(data => this.products=data);
+      .then(data => this.products=data)
+      .then(data => this.filteredProducts=data)
     
     fetch("http://localhost:4545/DAdemo/shopping")
       .then(response => response.json())

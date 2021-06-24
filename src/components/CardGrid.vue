@@ -35,7 +35,6 @@ export default {
   },
   methods:{
     addToCart(product){
-      console.log(product.idProducts)
       fetch("http://localhost:4545/DAdemo/shopping",
         {
           method: 'PUT',
