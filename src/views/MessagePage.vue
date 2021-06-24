@@ -23,14 +23,8 @@ export default {
     async sendMessage(){
       let message = document.getElementById("message-input").value
 
-      let response = await fetch("http://localhost:4545/DAdemo/registration?requestType=login&username="+username+"&password="+password, {method: 'POST'})
-      let result = await response.json()
-      if(result.result == 'success'){
-        this.$router.push('/')
-      }
-      else{
-        alert('Login failed')
-      }
+      let response = await fetch("http://localhost:4545/DAdemo/message?text=" + message)
+  
     }
   }
 }
