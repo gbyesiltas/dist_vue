@@ -8,7 +8,11 @@
         <h4>Password</h4>
         <input type="password" id="password-input" name="password"/>
       </section>
-      <b-button class="login-button" variant="primary" @click="login()">Log In</b-button>
+      <div class="buttons">
+        <b-button class="login-button" variant="success" @click="login()">Log In</b-button>
+        <b-button class="login-button" variant="primary" @click="signup()">Make Account</b-button>
+        <b-button class="login-button mainpage-button" variant="dark" @click="goToMainPage()">Go to Main Page </b-button>
+      </div>
   </div>
 </template>
 
@@ -36,7 +40,23 @@ export default {
       else{
         alert('Login failed')
       }
-    }
+    },
+    async signup(){
+      let username = document.getElementById("username-input").value
+      let password = document.getElementById("password-input").value
+
+      let response = await fetch("http://localhost:4545/DAdemo/registration?username="+username+"&password="+password, {method: 'PUT'})
+      let result = await response.json()
+      if(result.result == 'success'){
+        location.reload()
+      }
+      else{
+        alert('Could not make new account')
+      }
+    },
+    goToMainPage(){
+      this.$router.push('/')
+    },
   }
 }
 </script>
@@ -48,5 +68,18 @@ input{
 }
 .login-button{
   margin-top:10px;
+  width: 170px;
+}
+
+.buttons{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0;
+}
+
+.mainpage-button{
+  margin-top: 30px;
 }
 </style>

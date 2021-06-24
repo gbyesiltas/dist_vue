@@ -1,5 +1,7 @@
 <template>
 <div class="my-card-grid">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
   <b-alert
       :show="dismissCountDown"
       dismissible
@@ -15,7 +17,9 @@
             <div class="product-name">{{product.productName}}</div>
             <div>Price: {{product.productPrice}}$</div>
             <div>Amount in stock: {{product.productAmountInStock}}</div>
-            <b-button @click="addToCart(product)" variant="primary">Add To Cart</b-button>
+            <b-button @click="addToCart(product)" variant="primary" class="addtocart-button">
+              <span class="material-icons-outlined">add_shopping_cart</span>
+            </b-button>
           </div>
         </li>
   </ul>
@@ -83,8 +87,8 @@ li, ul{
 
 .btn{
   margin-top: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .product-name{
@@ -95,4 +99,11 @@ b-alert{
   max-height: 20px;
   margin-bottom: 0;
 }
+
+.addtocart-button{
+  display: flex;
+  align-items: center;
+}
+
+
 </style>

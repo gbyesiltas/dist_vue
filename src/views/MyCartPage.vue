@@ -20,9 +20,11 @@
       </li>
     </ul>
     <h3 v-if="itemsInCart.length!=0">Total price: {{totalPrice}}$</h3>
+    <h3 v-if="isLoggedIn">Money in your wallet: {{moneyInWallet}}$ </h3>
     <div class="buttons">
     <b-button class="main-page-button" :disabled="itemsInCart.length==0" variant="success" @click="makeOrder()">Make Order!</b-button>
-    <b-button class="main-page-button" variant="primary" @click="goToMainPage()">Go to Main Page</b-button>
+    <b-button class="main-page-button" v-if="isLoggedIn" variant="primary" @click="topUp()">Add 50$</b-button>
+    <b-button class="main-page-button" variant="dark" @click="goToMainPage()">Go to Main Page</b-button>
     </div>
   </div>
 </template>
@@ -39,6 +41,8 @@ export default {
       itemIDsInCart : [],
       dismissSecs: 1,
       dismissCountDown:0,
+      moneyInWallet:0,
+      isLoggedIn: false,
       showDismissableAlert: false,
     }
   },
@@ -69,18 +73,36 @@ export default {
       this.dismissCountDown = this.dismissSecs
     },
     async makeOrder(){
-      let loginResponse = await fetch("http://localhost:4545/DAdemo/registration")
-      let loginResponseJson = await loginResponse.json()
-      console.log(loginResponseJson)
-      if(loginResponseJson.isLoggedIn == false){
+      
+      if(this.isLoggedIn == false){
         this.$router.push('/login')
       }
       else{
-        let response = await fetch("http://localhost:4545/DAdemo/shopping", {method: 'POST'})
+        let response = await fetch("http://localhost:4545/DAdemo/shopping?userID="+this.userID, {method: 'POST'})
         let responseJson = await response.json()
 
         if(responseJson.result == 'success'){
           this.$router.push('/successfulPurchase')
+        }
+        else{
+          alert("There was a problem with your purchase")
+        }
+    }
+    },
+    async topUp(){
+      
+      if(this.isLoggedIn == false){
+        this.$router.push('/login')
+      }
+      else{
+        let response = await fetch("http://localhost:4545/DAdemo/registration?requestType=topUp&amount=50", {method: 'POST'})
+        let responseJson = await response.json()
+
+        if(responseJson.result == 'success'){
+          location.reload()
+        }
+        else{
+          alert("There was a problem with your top up request")
         }
     }
     }
@@ -96,6 +118,14 @@ export default {
       .then(response => response.json())
       .then(data => this.itemsInCart.push(data))
     }
+
+    let loginResponse = await fetch("http://localhost:4545/DAdemo/registration")
+    let loginResponseJson = await loginResponse.json()
+
+    this.userID = loginResponseJson.userID
+    this.isLoggedIn = loginResponseJson.isLoggedIn
+    this.moneyInWallet = loginResponseJson.moneyInWallet
+
   },
 }
 </script>
