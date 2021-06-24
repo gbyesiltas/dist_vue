@@ -9,6 +9,7 @@ import MainPage from "./views/MainPage.vue"
 import SuccessfulPurchasePage from "./views/SuccessfulPurchase.vue"
 import MyCartPage from "./views/MyCartPage.vue"
 import LoginPage from "./views/LoginPage.vue"
+import MessagePage from "./views/MessagePage.vue"
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
@@ -30,7 +31,11 @@ const router = new VueRouter({
     {
       path:'/login',
       component: LoginPage
-    }
+    },
+	{
+		path:'/message',
+		component: MessagePage
+	}
   ]
 })
 
