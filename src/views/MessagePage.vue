@@ -4,7 +4,10 @@
         <h4>Send us your message</h4>
         <input type="text" id="message-input" name="message"/>
       </section>
+      <div class="buttons">
       <b-button class="send-button" variant="primary" @click="sendMessage()">Send</b-button>
+      <b-button class="mainpage-button" variant="dark" @click="goToMainPage()">Go to Main Page</b-button>
+      </div>
   </div>
 </template>
 
@@ -20,11 +23,13 @@ export default {
     }
   },
   methods:{
-    async sendMessage(){
+    sendMessage(){
       let message = document.getElementById("message-input").value
-
-      let response = await fetch("http://localhost:4545/DAdemo/message?text=" + message)
-  
+      fetch("http://localhost:4545/DAdemo/message?text=" + message)
+      alert("Thank you for your feedback!")
+    },
+    goToMainPage(){
+      this.$router.push('/')
     }
   }
 }
@@ -42,5 +47,16 @@ input{
 }
 .send-button{
   margin-top:10px;
+}
+
+.buttons{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mainpage-button{
+  margin-top: 10px;
+  width: 150px;
 }
 </style>

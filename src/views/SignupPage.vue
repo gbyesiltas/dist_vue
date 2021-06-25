@@ -1,6 +1,14 @@
 <template>
   <div>
       <section>
+        <h4>Name</h4>
+        <input type="text" id="name-input" name="name"/>
+      </section>
+      <section>
+        <h4>Surname</h4>
+        <input type="text" id="surname-input" name="surname"/>
+      </section>
+      <section>
         <h4>Username</h4>
         <input type="text" id="username-input" name="username"/>
       </section>
@@ -9,8 +17,7 @@
         <input type="password" id="password-input" name="password"/>
       </section>
       <div class="buttons">
-        <b-button class="login-button" variant="success" @click="login()">Log In</b-button>
-        <b-button class="login-button" variant="primary" @click="signup()">Make Account</b-button>
+        <b-button class="login-button" variant="success" @click="signup()">Make Account</b-button>
         <b-button class="login-button mainpage-button" variant="dark" @click="goToMainPage()">Go to Main Page </b-button>
       </div>
   </div>
@@ -19,30 +26,28 @@
 <script>
 
 export default {
-  name: 'LoginPage',
+  name: 'SignupPage',
   components: {
   },
   data(){
     return {
-      loginResult:null,
     }
   },
   methods:{
-    async login(){
+    async signup(){
       let username = document.getElementById("username-input").value
       let password = document.getElementById("password-input").value
+      let name = document.getElementById("name-input").value
+      let surname = document.getElementById("surname-input").value
 
-      let response = await fetch("http://localhost:4545/DAdemo/registration?requestType=login&username="+username+"&password="+password, {method: 'POST'})
+      let response = await fetch("http://localhost:4545/DAdemo/registration?username="+username+"&password="+password+"&name="+name+"&surname="+surname, {method: 'PUT'})
       let result = await response.json()
       if(result.result == 'success'){
         this.$router.push('/')
       }
       else{
-        alert('Login failed')
+        alert('Could not make new account')
       }
-    },
-    signup(){
-      this.$router.push({path:'/signup'})
     },
     goToMainPage(){
       this.$router.push('/')

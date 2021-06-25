@@ -60,7 +60,7 @@ export default {
     
     if(result.isLoggedIn){
         this.loggedIn = result.isLoggedIn
-        this.$emit('isLoggedIn')
+        this.$emit('isLoggedIn',result.userID)
     }
   }
 }

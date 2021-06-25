@@ -1,6 +1,7 @@
 <template>
   <div>
     <MyNavbar @productFilterApplied="applyProductFilter" @isLoggedIn="isLoggedIn" :numberOfItems="numberOfItems" />
+    <h3 class="greeting" v-if="customerName!=null">Hello {{customerName}}!</h3> 
     <CardGrid :products="filteredProducts" @itemAdded="itemAdded"/>
     
     <div class="buttons">
@@ -33,6 +34,7 @@ export default {
       loggedIn: false,
       numberOfVisits:0,
       activeProductFilter:0,
+      customerName:null,
     }
   },
   methods:{
@@ -57,8 +59,12 @@ export default {
     itemAdded(){
       this.numberOfItems= this.numberOfItems+1
     },
-    isLoggedIn(){
+    async isLoggedIn(userID){
       this.loggedIn=true
+      console.log(userID)
+      let response = await fetch("http://localhost:8080/DAdemo/api/customers/"+userID)
+      let responseString = await response.text()
+      this.customerName = responseString;
     },
     applyProductFilter(filterNo){
 
@@ -121,6 +127,10 @@ export default {
 
   .main-page-button{
     margin-bottom: 10px;
+  }
+
+  .greeting{
+    margin-top: 15px;
   }
 
 </style>
